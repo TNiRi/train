@@ -16,7 +16,12 @@ def delete():
             file.writelines(i)
                
 def search():
-    ...
+    searched_phrase = input("Введите строчку для поиска: ")
+    with open('Notes.txt', 'r') as file:
+        lst = file.readlines()
+    for i in lst:
+        if searched_phrase in i:
+            print(i)
 
 def close():
     exit()
