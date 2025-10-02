@@ -1,28 +1,46 @@
 def create():
-    pass # не реализовано, но будет работать. Можно заменить на '...'
+    with open('Notes.txt', 'a') as file:
+        file.write(input('Введите новую заметку: '))
 
 def delete():
-    pass
-
+    with open('Notes.txt', 'r+') as file:
+        lst = file.readlines()
+        print(lst)
+        for i in range(len(lst)):
+            print(f'{i+1} - {lst[i][:25:]}')
+        ind_del_note = int(input('\nВведите номер удаляемой заметки: '))-1
+        lst.pop(ind_del_note)
+        print(lst)
+        file.truncate(0)
+        for i in lst:
+            file.writelines(i)
+               
 def search():
-    pass
+    ...
 
 def close():
-    pass
+    exit()
 
 def show():
-    pass
+#    print("qwerty")
+    with open('Notes.txt', 'r') as file:
+        lst = file.readlines()
+#        print(lst)
+        for i in range(len(lst)-1):
+                print(lst[i][:-1:])
+        print(lst[-1])
 
 def interface():
     print('Мы рады приветствовать Вас в нашем приложении для работы с заметками!')
     while True:
-        answer = int(input('''   Доступные действия:
+        answer = input(('''   Доступные действия:
         1 - создать заметку;
         2 - удалить заметку;
         3 - найти заметку;
         4 - закрыть заметку;
         5 - показать заметку.
-    Для выбора команды напишите номер команды.'''))
+    Для выбора команды напишите номер команды: '''))
+#        print('qwerty')
         match answer:
             case "1":
                 create()
@@ -33,6 +51,7 @@ def interface():
             case "4":
                 close()
             case "5":
+#                print('qwerty222')
                 show()
             case _:  #остальные варианты ввода пользователя
                 print("Неверое число! Попробуйте снова!")
