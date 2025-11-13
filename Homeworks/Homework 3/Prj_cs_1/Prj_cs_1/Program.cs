@@ -47,7 +47,7 @@ class Polynomial
         return equation;
     }
 
-        public static Polynomial operator + (Polynomial obj1, Polynomial obj2)
+    public static Polynomial operator + (Polynomial obj1, Polynomial obj2)
     {
         double[] coeffs3;
         if (obj1.degree > obj2.degree)
@@ -68,7 +68,14 @@ class Polynomial
         }
         Polynomial obj3 = new Polynomial(coeffs3);
         return obj3;
-        }
+    }
+    public static Polynomial operator * (Polynomial obj1, double k)
+    {
+        double[] coeffs2 = (double[])obj1.coeffs.Clone();
+        for (int i = 0;  i < coeffs2.Length; i += 1) { coeffs2[i] *= k; }
+        Polynomial obj2 = new Polynomial(coeffs2);
+        return obj2;
+    }
 }
 
     class Programm
@@ -80,5 +87,6 @@ class Polynomial
         Console.WriteLine(p1);
         Polynomial p2 = new Polynomial([2.0, 3.0, 1.0]);
         Console.WriteLine(p1 + p2);
+        Console.WriteLine(p1 * 5);
         }
     }
