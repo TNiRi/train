@@ -59,7 +59,7 @@ class Polynomial
             }
         }
         else
-        {
+        { 
             coeffs3 = (double[])obj2.coeffs.Clone();
             for (int i = 0; i < obj1.coeffs.Length; i += 1)
             {
@@ -76,6 +76,33 @@ class Polynomial
         Polynomial obj2 = new Polynomial(coeffs2);
         return obj2;
     }
+    public static Polynomial operator * (double k, Polynomial obj1)
+    {
+        return obj1 * k;
+    }
+    public double Evaluate(double x)
+    {
+        double sum = 0;
+        for (int i = 0; i < coeffs.Length; i ++)
+        {
+            sum += coeffs[i] * Math.Pow(x, i);
+        }
+        return sum;
+    }
+    public static Polynomial operator * (Polynomial p1, Polynomial p2)
+    {
+        int n = p1.coeffs.Length + p2.coeffs.Length;
+        double[] coeffs3 = new double[n];
+        for (int i = 0; i < p1.coeffs.Length; i++)
+        {
+            for (int j = 0; i < p2.coeffs.Length; i++)
+            {
+                coeffs3[i+j] = p1.coeffs.Length * p2.coeffs.Length;
+            }
+        }
+        Polynomial p3 = new Polynomial(coeffs3);
+        return p3;
+    }
 }
 
     class Programm
@@ -88,5 +115,8 @@ class Polynomial
         Polynomial p2 = new Polynomial([2.0, 3.0, 1.0]);
         Console.WriteLine(p1 + p2);
         Console.WriteLine(p1 * 5);
+        Console.WriteLine(5 * p1);
+        Console.WriteLine(p1.Evaluate(2));
+        Console.WriteLine(p1 * p2);
         }
     }
