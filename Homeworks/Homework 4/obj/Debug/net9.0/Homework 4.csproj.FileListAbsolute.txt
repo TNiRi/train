@@ -1,0 +1,15 @@
+d:\Veronika\Сохранить для шк\HW_and_codes_rep\Homeworks\Homework 4\bin\Debug\net9.0\Homework 4.exe
+D:\Veronika\Сохранить для шк\HW_and_codes_rep\Homeworks\Homework 4\bin\Debug\net9.0\Homework 4.deps.json
+D:\Veronika\Сохранить для шк\HW_and_codes_rep\Homeworks\Homework 4\bin\Debug\net9.0\Homework 4.runtimeconfig.json
+d:\Veronika\Сохранить для шк\HW_and_codes_rep\Homeworks\Homework 4\bin\Debug\net9.0\Homework 4.dll
+d:\Veronika\Сохранить для шк\HW_and_codes_rep\Homeworks\Homework 4\bin\Debug\net9.0\Homework 4.pdb
+d:\Veronika\Сохранить для шк\HW_and_codes_rep\Homeworks\Homework 4\obj\Debug\net9.0\Homework 4.GeneratedMSBuildEditorConfig.editorconfig
+d:\Veronika\Сохранить для шк\HW_and_codes_rep\Homeworks\Homework 4\obj\Debug\net9.0\Homework 4.AssemblyInfoInputs.cache
+d:\Veronika\Сохранить для шк\HW_and_codes_rep\Homeworks\Homework 4\obj\Debug\net9.0\Homework 4.AssemblyInfo.cs
+d:\Veronika\Сохранить для шк\HW_and_codes_rep\Homeworks\Homework 4\obj\Debug\net9.0\Homework 4.csproj.CoreCompileInputs.cache
+d:\Veronika\Сохранить для шк\HW_and_codes_rep\Homeworks\Homework 4\obj\Debug\net9.0\Homework 4.sourcelink.json
+d:\Veronika\Сохранить для шк\HW_and_codes_rep\Homeworks\Homework 4\obj\Debug\net9.0\Homework 4.dll
+d:\Veronika\Сохранить для шк\HW_and_codes_rep\Homeworks\Homework 4\obj\Debug\net9.0\refint\Homework 4.dll
+d:\Veronika\Сохранить для шк\HW_and_codes_rep\Homeworks\Homework 4\obj\Debug\net9.0\Homework 4.pdb
+D:\Veronika\Сохранить для шк\HW_and_codes_rep\Homeworks\Homework 4\obj\Debug\net9.0\Homework 4.genruntimeconfig.cache
+D:\Veronika\Сохранить для шк\HW_and_codes_rep\Homeworks\Homework 4\obj\Debug\net9.0\ref\Homework 4.dll
