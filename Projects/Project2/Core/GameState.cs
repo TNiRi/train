@@ -8,6 +8,8 @@ public class GameState
     public int TurnCount { get; set; }
     public List<string> EventLog { get; private set; }
     public Location CurrentLocation { get; set; }
+    public List<Quest> Quests { get; private set; }
+    public Dictionary<string, Location> AllLocations { get; private set; }
 
     public GameState(Location startLocation)
     {
@@ -17,6 +19,9 @@ public class GameState
         TurnCount = 0;
         EventLog = new List<string>();
         CurrentLocation = startLocation;
+        Quests = new List<Quest>();
+        AllLocations = new Dictionary<string, Location>();
+        AllLocations[startLocation.Name] = startLocation;
 
         AddEventLog("Игра началась");
     }
@@ -25,5 +30,27 @@ public class GameState
     {
         EventLog.Add($"[Ход {TurnCount}] {message}");
         Console.WriteLine($"[Ход {TurnCount}] {message}");
+        CheckQuests();  // ← ИСПРАВЛЕНО
+    }
+
+    // Методы для работы с квестами
+    public void AddQuest(Quest quest)
+    {
+        Quests.Add(quest);
+    }
+
+    public void CheckQuests()
+    {
+        foreach (var quest in Quests)
+        {
+            quest.CheckCompletion(this);
+        }
+    }
+    public void RegisterLocation(Location location)
+    {
+        if (!AllLocations.ContainsKey(location.Name))
+        {
+            AllLocations[location.Name] = location;
+        }
     }
 }

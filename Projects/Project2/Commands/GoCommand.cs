@@ -17,6 +17,11 @@ public class GoCommand : CommandBase
         {
             Location next = current.Exits[_keyword];
             state.CurrentLocation = next;
+            foreach (var evt in next.Events)
+            {
+                if (evt is OnEnterLocationEvent)
+                    evt.TryTrigger(state);
+            }
             state.TurnCount++;
 
             Console.WriteLine($"\nВы перешли по слову '{_keyword}'");
