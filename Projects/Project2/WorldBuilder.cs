@@ -10,7 +10,7 @@ public static class WorldBuilder
         
         Location darkCorridor = new Location("Тёмный мигающий коридор", "Свет мигает. На стене выцарапан код: 4815. В углу деревянный ящик 'crate'.");
         
-        Location storage = new Location("Склад", "Старые ящики, инструменты. В углу стоит ржавый сейф 'safe'.");
+        Location storage = new Location("Склад", "Старые ящики, инструменты. В углу стоит ржавый сейф 'safe'. Видна дверь 'door'.");
         
         Location generatorRoom = new Location("Генераторная", "Гулкое помещение. Генератор молчит.");
         
@@ -20,20 +20,30 @@ public static class WorldBuilder
         Location nextWorld = new Location("Новый мир", "Ты перенёсся в неизвестное место. Здесь пока ничего нет.");
 
         // ========== ОБЪЕКТЫ ==========
+        // Сейф (даёт лом)
         Safe safe = new Safe("safe", "Сейф", "Ржавый сейф с цифровым замком", "4815", "Лом");
         storage.AddObject(safe);
 
-        LockedCrate crate = new LockedCrate("crate", "Деревянный ящик", "Крепкий ящик, сбитый железными полосами", "Лом", "Ключ от генератора");
+        // Ящик (даёт ключ от двери, взламывается ломом)
+        LockedCrate crate = new LockedCrate("crate", "Деревянный ящик", "Крепкий ящик, сбитый железными полосами", "Лом", "Ключ от двери");
         darkCorridor.AddObject(crate);
 
-        Door door = new Door("door", "Дверь в генераторную", "Тяжёлая дверь с замком", "Ключ от генератора", generatorRoom);
+        // Дверь (открывается ключом от двери)
+        Door door = new Door("door", "Дверь в генераторную", "Тяжёлая дверь с замком", "Ключ от двери", generatorRoom);
         storage.AddObject(door);
 
-        Generator generator = new Generator("generator", "Генератор", "Большая машина. Есть кнопка.");
+        // Генератор (запускается предохранителем)
+        Generator generator = new Generator("generator", "Генератор", "Большая машина. Есть кнопка.", "Предохранитель");
         generatorRoom.AddObject(generator);
 
+        // Ловушка
         Trap trap = new Trap("trap", "Растяжка", "Проволока на полу", 20, true);
         storage.AddObject(trap);
+
+        // Сундук с предметами (появляется после разговора с призраком)
+        var chestItems = new List<string> { "Предохранитель", "Фонарик" };
+        Chest chest = new Chest("treasure", "Сундук", "Старый ржавый сундук", chestItems);
+        storage.AddObject(chest);
 
         // ========== NPC ==========
         Npc ghost = new Npc("ghost", "Призрак инженера", "Прозрачная фигура в грязной спецовке.");
@@ -41,13 +51,14 @@ public static class WorldBuilder
         ghost.AddDialogue("code", "4815. Не потеряй.");
         ghost.AddDialogue("crowbar", "Лом в сейфе. Им можно взломать ящик в коридоре.");
         ghost.AddDialogue("key", "Ключ в ящике. Откроешь дверь в генераторную.");
-        ghost.AddDialogue("generator", "Вставь ключ и нажми кнопку.");
+        ghost.AddDialogue("generator", "Чтобы запустить генератор, нужен предохранитель. Он в сундуке.");
         ghost.AddDialogue("safe", "Сейф на складе. Код 4815.");
         ghost.AddDialogue("crate", "Ящик в коридоре. Взломай его ломом.");
         ghost.AddDialogue("door", "Дверь в генераторную. Открывается ключом.");
+        ghost.AddDialogue("chest", "Сундук на складе. Откроется, когда поговоришь со мной.");
         storage.AddObject(ghost);
 
-        // ========== ПЕРЕХОДЫ (кодовые слова — на английском) ==========
+        // ========== ПЕРЕХОДЫ (БЕЗ ПРЯМОГО ПЕРЕХОДА В ГЕНЕРАТОРНУЮ) ==========
         entry.AddExit("storage", storage);
         entry.AddExit("corridor", darkCorridor);
         
@@ -55,7 +66,7 @@ public static class WorldBuilder
         darkCorridor.AddExit("storage", storage);
         
         storage.AddExit("corridor", darkCorridor);
-        storage.AddExit("generator", generatorRoom);
+        // НЕТ перехода "generator"! Он добавится после открытия двери
         
         generatorRoom.AddExit("storage", storage);
         generatorRoom.AddExit("exit", exitHall);
@@ -68,7 +79,7 @@ public static class WorldBuilder
         OnTurnEvent darkEvent = new OnTurnEvent(noLight, darkEffects, false);
         darkCorridor.AddEvent(darkEvent);
 
-        // ========== КВЕСТ ==========
+        // ========== КВЕСТ 1: ЗАПУСТИТЬ ГЕНЕРАТОР ==========
         ICondition generatorNotOn = new NotCondition(new FlagCondition("GeneratorOn", true));
         ICondition fuseUsed = new FlagCondition("FuseUsed", true);
         ICondition questCondition = new AndCondition(generatorNotOn, fuseUsed);
@@ -76,12 +87,25 @@ public static class WorldBuilder
         var questReward = new List<IEffect>
         {
             new LogEffect("Генератор ожил! Лампы перестали мигать."),
-            new SetFlagEffect("GeneratorOn", true),
+            new SetFlagEffect("GeneratorOn", true)
+        };
+
+        Quest generatorQuest = new Quest("Запустить генератор", "Найди способ добраться до генератора и включить его", questCondition, questReward);
+
+        // ========== КВЕСТ 2: ПОКИНУТЬ БУНКЕР (ВТОРОЙ КВЕСТ ПО ТЗ) ==========
+        ICondition generatorOn = new FlagCondition("GeneratorOn", true);
+        ICondition notExited = new NotCondition(new FlagCondition("Exited", true));
+        ICondition secondQuestCondition = new AndCondition(generatorOn, notExited);
+
+        var secondQuestReward = new List<IEffect>
+        {
+            new LogEffect("Ты нашёл путь наружу!"),
+            new SetFlagEffect("Exited", true),
             new AddExitEffect("Выходной холл", "portal", nextWorld),
             new LogEffect("На стене загорелось слово: PORTAL. Теперь ты можешь уйти в другой мир.")
         };
 
-        Quest generatorQuest = new Quest("Запустить генератор", "Найди способ добраться до генератора и включить его", questCondition, questReward);
+        Quest secondQuest = new Quest("Покинуть бункер", "Найди выход из бункера", secondQuestCondition, secondQuestReward);
 
         // ========== СОСТОЯНИЕ ИГРЫ ==========
         GameState state = new GameState(entry);
@@ -92,9 +116,9 @@ public static class WorldBuilder
         state.RegisterLocation(exitHall);
         state.RegisterLocation(nextWorld);
         state.AddQuest(generatorQuest);
+        state.AddQuest(secondQuest);
 
-        state.AddEventLog("Ты в бункере. В тёмном коридоре что-то написано на стене.");
-        state.AddEventLog("Призрак на складе может помочь. Попробуй: ask hello");
+        state.AddEventLog("Ты в бункере. Призрак на складе может помочь. Попробуй: ask hello");
 
         return state;
     }

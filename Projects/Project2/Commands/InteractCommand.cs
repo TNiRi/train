@@ -22,7 +22,7 @@ public class InteractCommand : CommandBase
             Console.WriteLine($"\nВы взаимодействуете с {target.Name}...");
             target.Interact(state);
             state.TurnCount++;
-            state.AddEventLog($"Взаимодействие с {target.Name}");
+            // state.AddEventLog($"Взаимодействие с {target.Name}");
         }
         else
         {

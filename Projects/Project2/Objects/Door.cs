@@ -22,7 +22,7 @@ public class Door : IInteractable
     {
         if (_isOpen)
         {
-            Console.WriteLine($"Дверь уже открыта. Вы можете пройти через нее.");
+            Console.WriteLine($"Дверь уже открыта. Используйте 'go generator', чтобы пройти.");
             return;
         }
         
@@ -30,9 +30,10 @@ public class Door : IInteractable
         {
             _isOpen = true;
             // Добавляем переход в текущую локацию
-            state.CurrentLocation.AddExit("дверь", _targetLocation);
-            state.AddEventLog($"Вы открыли {Name} с помощью {_requiredItem}");
-            Console.WriteLine($"Вы использовали {_requiredItem} и открыли дверь! Теперь можно пройти через нее командой 'go дверь'");
+            state.CurrentLocation.AddExit("generator", _targetLocation);
+            state.Inventory.Remove(_requiredItem);
+            state.AddEventLog($"Вы открыли {Name} с помощью {_requiredItem}. Теперь можно пройти: go generator");
+            Console.WriteLine($"Вы использовали {_requiredItem} и открыли дверь! Теперь введите 'go generator', чтобы пройти.");
         }
         else
         {
